@@ -1,9 +1,7 @@
-package com.example.goalachiever;
+package com.cashcall.goalachiever;
 
 import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
+import android.view.*;
 import androidx.databinding.DataBindingUtil;
 import androidx.databinding.ViewDataBinding;
 import androidx.fragment.app.Fragment;
@@ -27,6 +25,24 @@ public class HomeFragment extends Fragment {
                 container,
                 false);
 
+
+
+        setHasOptionsMenu(true);
         return binding.getRoot();
     }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.home_options_menu, menu);
+
+        //        if (null == getShareIntent().resolveActivity(getActivity().getPackageManager())) {
+        //            menu.findItem(R.id.share).setVisible(false)
+        //        }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        return super.onOptionsItemSelected(item);
+    }
+
 }

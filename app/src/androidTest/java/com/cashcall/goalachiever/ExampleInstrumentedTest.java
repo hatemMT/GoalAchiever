@@ -1,4 +1,4 @@
-package com.example.goalachiever;
+package com.cashcall.goalachiever;
 
 import android.content.Context;
 import androidx.test.platform.app.InstrumentationRegistry;

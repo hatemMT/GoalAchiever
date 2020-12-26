@@ -1,4 +1,4 @@
-package com.example.goalachiever;
+package com.cashcall.goalachiever;
 
 import org.junit.Test;
 

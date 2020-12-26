@@ -4,19 +4,27 @@ android {
     compileSdkVersion 30
 
     defaultConfig {
-        applicationId "com.example.goalachiever"
+        applicationId "com.cashcall.goalachiever"
         minSdkVersion 17
         targetSdkVersion 30
         versionCode 1
         versionName "1.0"
-
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    buildFeatures {
+        dataBinding true
     }
 
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+
+        debug {
+            applicationIdSuffix ".debug"
+            debuggable true
         }
     }
 
@@ -24,12 +32,72 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+
+    flavorDimensions "api"
+
+    productFlavors {
+        minApi21 {
+            dimension "api"
+            minSdkVersion 21
+            versionNameSuffix "-minApi21"
+        }
+
+        minApi17 {
+            dimension "api"
+            minSdkVersion 17
+            versionNameSuffix "-minApi17"
+        }
+    }
+    android.applicationVariants.all { variant ->
+        if (variant.name.contains("minApi17")) {
+            variant.getCompileConfiguration().resolutionStrategy.force "com.squareup.okhttp3:okhttp:3.12.+"
+            variant.getRuntimeConfiguration().resolutionStrategy.force "com.squareup.okhttp3:okhttp:3.12.+"
+        }
+
+        variant.outputs.each { output ->
+            if (variant.name.contains("minApi17")) {
+                output.versionCodeOverride = 10000000 + variant.versionCode
+            } else {
+                output.versionCodeOverride = 20000000 + variant.versionCode
+            }
+        }
+    }
 }
 
 dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation 'androidx.appcompat:appcompat:1.2.0'
-    implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
+
+    implementation "androidx.constraintlayout:constraintlayout:$constraint_layout_version"
+
+    // ViewModel
+    implementation "androidx.lifecycle:lifecycle-viewmodel:$lifecycle_version"
+    // LiveData
+    implementation "androidx.lifecycle:lifecycle-livedata:$lifecycle_version"
+    // Lifecycles only (without ViewModel or LiveData)
+    implementation "androidx.lifecycle:lifecycle-runtime:$lifecycle_version"
+
+    // Saved state module for ViewModel
+    implementation "androidx.lifecycle:lifecycle-viewmodel-savedstate:$lifecycle_version"
+
+    // Annotation processor
+    implementation "androidx.lifecycle:lifecycle-common-java8:$lifecycle_version"
+
+    //Navigation
+    implementation "androidx.navigation:navigation-fragment:$nav_version"
+    implementation "androidx.navigation:navigation-ui:$nav_version"
+
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+
+    //rxjava
+    implementation "io.reactivex.rxjava2:rxjava:$rx_java_version"
+    implementation "io.reactivex.rxjava2:rxandroid:$rx_android_version"
+
+    //Dagger2
+    implementation "com.google.dagger:dagger:$dagger2_version"
+    annotationProcessor "com.google.dagger:dagger-compiler:$dagger2_version"
+
+    //Test Deps.
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
